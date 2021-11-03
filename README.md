@@ -2,6 +2,8 @@
 
 TGDataset is a collection of Telegram channels that takes a snapshot of the actual Telegram ecosystem instead of focusing on a particular topic. 
 
+The dataset can be downloaded [here](https://drive.google.com/file/d/1ZTccHdWC1kuE4cuXoYCYk4WuEM8c19qr/view?usp=sharing).
+
 If you use this dataset please cite:
 ```
 @INPROCEEDINGS{,
