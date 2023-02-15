@@ -104,3 +104,7 @@ def import_channels_to_mongoDB(db_name):
                 channel = channels[ch_id]
                 channel['_id'] = ch_id
                 insert_channel(channel, db_name)
+
+
+if __name__ == '__main__':
+    import_channels_to_mongoDB('TGDataset')

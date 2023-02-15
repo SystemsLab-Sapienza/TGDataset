@@ -1,10 +1,14 @@
 from collections import defaultdict
+from multiprocessing import Pool
 import re
 from langdetect import detect
 import unicodedata
 from nltk.tokenize import RegexpTokenizer
 from gensim.parsing.preprocessing import strip_punctuation
-
+import pandas as pd
+import db_utilities
+from topic_modeling_LDA import split_list
+from tqdm import tqdm
 
 
 # get rid of emoji (faster method)
@@ -84,4 +88,25 @@ def detect_language(channel):
             target_lan = lan
             max_counter = dict_lang[lan]
 
-    return target_lan
+    return target_lan, channel['_id']
+
+
+def perform_language_detection():
+    chs_id = db_utilities.get_channel_ids()
+    portions = split_list(chs_id, 100)
+
+    results = {'ch_id':[],'language':[]}
+
+    for portion in tqdm(portions):
+        chs = db_utilities.get_channels_by_ids(portion)
+
+        with Pool(25) as pool:
+            for langugage, ch_id in pool.map(detect_language, chs):
+                results['language'].append(langugage)
+                results['ch_id'].append(ch_id) 
+    
+    pd.DataFrame(results).to_csv('data/channel_to_language_mapping.csv', index=False)
+
+
+if __name__ == '__main__':
+    perform_language_detection()
