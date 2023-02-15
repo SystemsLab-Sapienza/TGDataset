@@ -2,7 +2,7 @@
 
 TGDataset is a collection of Telegram channels that takes a snapshot of the actual Telegram ecosystem instead of focusing on a particular topic. 
 
-The dataset size is approximately 116 GB and is available for download in its zipped version (roughly 16.5 GB) [here](https://drive.google.com/file/d/1ZTccHdWC1kuE4cuXoYCYk4WuEM8c19qr/view?usp=sharing).
+The dataset size is approximately 460 GB and is available for download in its zipped version (roughly 71 GB) [here](TODO_link_a_zenodo).
 
 If you use this dataset please cite:
 ```
@@ -19,7 +19,7 @@ If you use this dataset please cite:
 
 ## Structure
 
-The dataset contains 35,382 Telegram channels stored in several JSON files. 
+The dataset contains 120,979 Telegram channels stored in (alphabetically sorted) 121 JSON files. 
 
 For each channel, we store the following information:
 - **channel_id**: the ID of Telegram channel (*int*),
@@ -84,3 +84,32 @@ The JSON files are in the following structure:
   },...                  
 }
 ``` 
+
+
+## Other data
+The data folder contains two csv files:
+
+- **ch_to_topic_mapping.csv**: indicates the topic addressed by each channel (identified by its ID).
+- **channel_to_language_mapping.csv**: indicates the language used by each channel (identified by its ID).
+
+
+## Additional files
+This repository contains the following scripts.
+
+
+**db_utilities.py**: defines utility functions to interact with MongoDB.
+
+- *import_channels_to_mongoDB(db_name)*: imports the channels from json format files to MongoDB creating a new db called db_name.
+- *get_channel_ids()*: returns all the ID of the channels within the MongoDB database.
+- *get_channels_by_ids(ids_channels)*: return the channels with ID belonging to the given list of IDs.
+- *get_channels_by_id(id_channel)*: return the channel with ID id_channel.
+
+**language_detection.py**: defines the functions used to perform language detection.
+
+- *preprocessDocs(docs)*: performs the preprocessing of channels
+- *detect_language(channel)*: detects the language of target channel
+
+**topic_modeling_LDA.py**: defines the functions used to perform topic modeling.
+
+- *perform_preprocessing()*: performs the preprocessing of the channels
+- *perform_LDA()*: performs LDA on the collected channels
