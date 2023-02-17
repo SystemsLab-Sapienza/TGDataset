@@ -2,7 +2,7 @@
 
 TGDataset is a collection of Telegram channels that takes a snapshot of the actual Telegram ecosystem instead of focusing on a particular topic. 
 
-The dataset size is approximately 460 GB and is available for download in its zipped version (roughly 71 GB) [here](TODO_link_a_zenodo).
+The dataset size is approximately 460 GB and is available for download in its zipped version (roughly 71 GB) through the Zenodo service [here](https://zenodo.org/record/7640712#.Y-9PjNLMKXI).
 
 If you use this dataset please cite:
 ```
