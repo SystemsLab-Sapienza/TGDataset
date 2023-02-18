@@ -9,7 +9,7 @@ import tmtoolkit
 import numpy as np
 from gensim.parsing.preprocessing import strip_punctuation
 import db_utilities
-import spacy as sp
+import spacy
 
 
 from sklearn.decomposition import LatentDirichletAllocation
@@ -101,6 +101,7 @@ def get_corpus(channel):
 
 # Perform preprocessing on messages of target channel
 def preprocess(channel):
+    sp = spacy.load('en_core_web_sm',  disable=['parser', 'ner'])
 
     channel_tokens = []
     for message in channel:
