@@ -53,9 +53,6 @@ def preprocessDocs(docs):
     # Remove numbers, but not words that contain numbers.
     docs = [[token for token in doc if not token.isnumeric()] for doc in docs]
 
-    # Remove words that are only one or two characters.
-    docs = [[token for token in doc if len(token) > 2] for doc in docs]
-
     # Strip punctuation
     docs = [[strip_punctuation(token) for token in doc] for doc in docs]
     
