@@ -9,6 +9,7 @@ import tmtoolkit
 import numpy as np
 from gensim.parsing.preprocessing import strip_punctuation
 import db_utilities
+import spacy as sp
 
 
 from sklearn.decomposition import LatentDirichletAllocation
