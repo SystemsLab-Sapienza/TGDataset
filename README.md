@@ -103,6 +103,7 @@ This repository contains the following scripts.
 - *get_channel_ids()*: returns all the ID of the channels within the MongoDB database.
 - *get_channels_by_ids(ids_channels)*: return the channels with ID belonging to the given list of IDs.
 - *get_channels_by_id(id_channel)*: return the channel with ID id_channel.
+- *get_channels_by_username(username)*: return the channel with target username.
 
 **language_detection.py**: defines the functions used to perform language detection.
 

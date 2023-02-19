@@ -56,6 +56,22 @@ def get_channels_by_id(id_channel, db_name='Telegram_test'):
     return ch
 
 
+# Return the channel with target username  
+# Parameters:
+#   - username -> username of the channel to return
+#   - db_name -> specify the name of the collection in MongoDB
+def get_channel_by_username(username, db_name='Telegram_test'):
+    ch = []
+    with MongoClient(uri) as client:
+        db = client[db_name]
+        
+        ch = db.Channel.find({ 'username': username})
+        ch['text_messages']= get_text_messages_by_id_ch(ch['_id'], db_name)
+        ch['_id'] = int(ch['_id'])
+    
+    return ch
+
+
 # Return the channels with ID belonging to the given list of IDs
 # Parameters:
 #   - ids_channels -> IDs list of channels to return
