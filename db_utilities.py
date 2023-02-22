@@ -6,7 +6,7 @@ from pathlib import Path
 import pickle 
 
 # MongoDB URI
-uri = MongoClient(host="localhost", port=27017)
+uri_client = MongoClient(host="localhost", port=27017)
 
 # Insert the channel in MongoDB
 # Parameters:
@@ -17,7 +17,7 @@ def insert_channel(new_channel, db_name='Telegram_test'):
     text_messages = new_channel['text_messages'].copy()
     new_channel.pop('text_messages')
     
-    with MongoClient(uri) as client:
+    with uri_client as client:
         db = client[db_name]
         fs = gridfs.GridFS(db)
         channel = db.Channel
@@ -30,7 +30,7 @@ def insert_channel(new_channel, db_name='Telegram_test'):
 #   - id_channel -> ID of the channel from which return the text messages
 #   - db_name -> specify the name of the collection in MongoDB
 def get_text_messages_by_id_ch(id_channel, db_name='Telegram_test'):
-    with MongoClient(uri) as client:
+    with uri_client as client:
         db = client[db_name]
         fs = gridfs.GridFS(db)
         try:
@@ -46,7 +46,7 @@ def get_text_messages_by_id_ch(id_channel, db_name='Telegram_test'):
 #   - db_name -> specify the name of the collection in MongoDB
 def get_channels_by_id(id_channel, db_name='Telegram_test'):
     ch = []
-    with MongoClient(uri) as client:
+    with uri_client as client:
         db = client[db_name]
         
         ch = db.Channel.find({ '_id': id_channel})
@@ -62,7 +62,7 @@ def get_channels_by_id(id_channel, db_name='Telegram_test'):
 #   - db_name -> specify the name of the collection in MongoDB
 def get_channel_by_username(username, db_name='Telegram_test'):
     ch = []
-    with MongoClient(uri) as client:
+    with uri_client as client:
         db = client[db_name]
         
         ch = db.Channel.find({ 'username': username})
@@ -78,7 +78,7 @@ def get_channel_by_username(username, db_name='Telegram_test'):
 #   - db_name -> specify the name of the collection in MongoDB
 def get_channels_by_ids(ids_channels, db_name='Telegram_test'):
     chs = []
-    with MongoClient(uri) as client:
+    with uri_client as client:
         db = client[db_name]
         
         for ch in db.Channel.find({ '_id': { '$in': ids_channels }}):
@@ -94,7 +94,7 @@ def get_channels_by_ids(ids_channels, db_name='Telegram_test'):
 #   - db_name -> specify the name of the collection in MongoDB
 def get_channel_ids(db_name='Telegram_test'):
     ids = []
-    with MongoClient(uri) as client:
+    with uri_client as client:
         db = client[db_name]
 
         ids = [ch['_id'] for ch in db.Channel.find({}, {'_id':1})]
