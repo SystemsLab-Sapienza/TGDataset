@@ -33,7 +33,7 @@ def get_text_messages_by_id_ch(id_channel, db_name='Telegram_test'):
     with MongoClient(uri) as client:
         db = client[db_name]
         fs = gridfs.GridFS(db)
-        stream = fs.get(str(id_channel)).read()
+        stream = fs.get(id_channel).read()
         
         return pickle.loads(stream)
 
@@ -116,7 +116,7 @@ def import_channels_to_mongoDB(db_name, root_directory='public_db'):
 
         for ch_id in channels:
             channel = channels[ch_id]
-            channel['_id'] = ch_id
+            channel['_id'] = int(ch_id)
             insert_channel(channel, db_name)
 
 
