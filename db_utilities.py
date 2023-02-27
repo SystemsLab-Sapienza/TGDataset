@@ -2,7 +2,7 @@ import json
 from pymongo import MongoClient
 import gridfs
 from tqdm import tqdm
-from pathlib import Path
+import os
 import pickle 
 
 # MongoDB URI
@@ -103,20 +103,23 @@ def get_channel_ids(db_name='Telegram_test'):
 # Imports the channels from json format to MongoDB
 # Parameters:
 #   - db_name -> specify the name of the collection to create in MongoDB
-def import_channels_to_mongoDB(db_name, directory='public_db'):
+def import_channels_to_mongoDB(db_name, root_directory='public_db'):
 
-    n_files = sum(1 for x in Path(directory).glob('*') if x.is_file())
-    files = Path(directory).glob('*')
+    file_list = []
+    for directory, _, files in os.walk(root_directory):
+        for name in files:
+            if name.endswith(".json"):
+                file_list.append(os.path.join(directory, name))
 
-    for file in tqdm(files, total=n_files):
+    for file in tqdm(file_list):
         with open(file) as f:
             print(file)
             channels = json.load(f)
 
-            for ch_id in channels:
-                channel = channels[ch_id]
-                channel['_id'] = ch_id
-                insert_channel(channel, db_name)
+        for ch_id in channels:
+            channel = channels[ch_id]
+            channel['_id'] = ch_id
+            insert_channel(channel, db_name)
 
 
 if __name__ == '__main__':
