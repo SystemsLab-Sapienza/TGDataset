@@ -88,16 +88,16 @@ def detect_language(channel):
     return target_lan, channel['_id']
 
 
-def perform_language_detection():
+def perform_language_detection(n_portion=100, n_pool=25):
     chs_id = db_utilities.get_channel_ids()
-    portions = split_list(chs_id, 100)
+    portions = split_list(chs_id, n_portion)
 
     results = {'ch_id':[],'language':[]}
 
     for portion in tqdm(portions):
         chs = db_utilities.get_channels_by_ids(portion)
 
-        with Pool(25) as pool:
+        with Pool(n_pool) as pool:
             for langugage, ch_id in pool.map(detect_language, chs):
                 results['language'].append(langugage)
                 results['ch_id'].append(ch_id) 

@@ -135,7 +135,7 @@ def preprocess(channel):
 
 
 # Load English channels and perform preprocessing  
-def perform_preprocessing(portion_size=1000):
+def perform_preprocessing(portion_size=1000, n_pool=45):
     df = pd.read_csv('data/channel_to_language_mapping.csv', sep='\t')
     df_ = df[df['language']=='en']
     english_channels = list(df_['ch_id'])
@@ -149,7 +149,7 @@ def perform_preprocessing(portion_size=1000):
         all_messages = []
         id_list = []
         discarded_messages = 0  
-        with Pool(45) as pool:
+        with Pool(n_pool) as pool:
             for single_corpus, _id, s_discarded_messages, ok_messages in pool.map(get_corpus, portion):
                 corpus.append(single_corpus)
                 id_list.append(_id)
@@ -162,7 +162,7 @@ def perform_preprocessing(portion_size=1000):
         save_as_pickle(all_messages, f'messages_per_channel/messages_{i}')
 
         docs = []
-        with Pool(45) as pool:
+        with Pool(n_pool) as pool:
             for channel_tokens in tqdm.tqdm(pool.imap(preprocess, all_messages), total=len(all_messages)):
                 docs.append(channel_tokens)
             
@@ -172,7 +172,7 @@ def perform_preprocessing(portion_size=1000):
 
 
 # perform LDA on English channels  
-def perform_LDA(n_portions=20):
+def perform_LDA(n_portions=20, min_topics=10, max_topics=31, step_size=1):
     texts = []
     id_list = []
     
@@ -185,9 +185,6 @@ def perform_LDA(n_portions=20):
             id_list.append(new_id_list[k])
 
     # Topics range
-    min_topics = 10
-    max_topics = 31
-    step_size = 1
     topics_range = range(min_topics, max_topics, step_size)
 
     model_results = {'Topics': [],'Coherence': []}
