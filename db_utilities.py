@@ -43,14 +43,13 @@ def get_text_messages_by_id_ch(id_channel, db_name='Telegram_test'):
 #   - id_channel -> ID of channel to return
 #   - db_name -> specify the name of the collection in MongoDB
 def get_channel_by_id(id_channel, db_name='Telegram_test'):
-    ch = []
+    ch = {}
     with MongoClient(uri) as client:
         db = client[db_name]
-        
-        ch = db.Channel.find({ '_id': id_channel})
-        ch['text_messages']= get_text_messages_by_id_ch(ch['_id'], db_name)
+        ch = db.Channel.find_one({"_id": id_channel})
+        ch['text_messages']= get_text_messages_by_id_ch(id_channel, db_name)
         ch['_id'] = int(ch['_id'])
-    
+
     return ch
 
 
@@ -59,11 +58,10 @@ def get_channel_by_id(id_channel, db_name='Telegram_test'):
 #   - username -> username of the channel to return
 #   - db_name -> specify the name of the collection in MongoDB
 def get_channel_by_username(username, db_name='Telegram_test'):
-    ch = []
+    ch = {}
     with MongoClient(uri) as client:
-        db = client[db_name]
-        
-        ch = db.Channel.find({ 'username': username})
+        db = client[db_name]        
+        ch = db.Channel.find_one({'username': username})
         ch['text_messages']= get_text_messages_by_id_ch(ch['_id'], db_name)
         ch['_id'] = int(ch['_id'])
     
