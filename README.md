@@ -19,7 +19,11 @@ If you use this dataset please cite:
 
 ## Structure
 
-The dataset contains 120,979 Telegram channels stored in (alphabetically sorted) 121 JSON files. 
+The dataset contains 120,979 Telegram channels stored in (alphabetically sorted) 121 JSON files divided in 4 folders:
+- TGDataset_1 -> channels with username starting with A to freeJul
+- TGDataset_2 -> channels with username starting with freejur to NaturKind
+- TGDataset_3 -> channels with username starting with Naturmedi to theslog
+- TGDataset_4 -> the remaining channels
 
 For each channel, we store the following information:
 - **channel_id**: the ID of Telegram channel (*int*),
