@@ -1,5 +1,6 @@
 import json 
 from pymongo import MongoClient
+from pymongo.errors import DuplicateKeyError
 import gridfs
 from tqdm import tqdm
 import os
@@ -21,7 +22,17 @@ def insert_channel(new_channel, db_name='Telegram_test'):
         db = client[db_name]
         fs = gridfs.GridFS(db)
         channel = db.Channel
-        channel.insert_one(new_channel)
+        try:
+            channel.insert_one(new_channel)
+        except DuplicateKeyError:
+            channel.update_one({'_id': new_channel['_id']},{'$set': {'generic_media': new_channel['generic_media'],
+                                                                     'creation_date': new_channel['creation_date'],
+                                                                     'username': new_channel['username'],
+                                                                     'title': new_channel['title'],
+                                                                     'description': new_channel['description'],
+                                                                     'scam': new_channel['scam'],
+                                                                     'verified': new_channel['verified'],
+                                                                     'n_subscribers': new_channel['n_subscribers']}})
         fs.put(pickle.dumps(text_messages), _id=new_channel['_id'])
 
 
@@ -111,7 +122,6 @@ def import_channels_to_mongoDB(db_name, root_directory='public_db'):
 
     for file in tqdm(file_list):
         with open(file) as f:
-            print(file)
             channels = json.load(f)
 
         for ch_id in channels:
