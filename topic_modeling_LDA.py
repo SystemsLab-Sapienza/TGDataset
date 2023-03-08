@@ -123,7 +123,7 @@ def preprocess(channel):
 
         # Remove stopwords 
         stop_words = stopwords.words('english')
-        stop_words.extend(['from', 'subject', 're', 'edu', 'use', 'hi', 'ah', 'ha', 'joinchat', 'htpps', 'http', 'www', 'channel', 'join', 'bot'])
+        stop_words.extend(['from', 'subject', 're', 'edu', 'use', 'hi', 'ah', 'ha', 'joinchat', 'https', 'http', 'www', 'channel', 'join', 'bot', 'com', 'us'])
         tokens = [word for word in tokens if word not in stop_words]
 
         # Strip punctuation
