@@ -1,4 +1,5 @@
 import json 
+import ijson
 from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError
 import gridfs
@@ -33,6 +34,8 @@ def insert_channel(new_channel, db_name='Telegram_test'):
                                                                      'scam': new_channel['scam'],
                                                                      'verified': new_channel['verified'],
                                                                      'n_subscribers': new_channel['n_subscribers']}})
+            
+        if fs.exists(new_channel['_id']): fs.delete(new_channel['_id'])
         fs.put(pickle.dumps(text_messages), _id=new_channel['_id'])
 
 
@@ -109,10 +112,65 @@ def get_channel_ids(db_name='Telegram_test'):
     return ids
 
 
+# Upload the json file to mongo db performing the parsing (less memory required) 
+# Parameters:
+#   - json_file -> the name of the file to upload
+#   - db_name -> specify the name of the collection in MongoDB
+def upload_json_file_to_mongo(json_file, db_name):
+    with open(json_file) as f:
+        events = ijson.basic_parse(f)
+
+        matched_key = None
+        ch_dict = {}
+        matched_sub_key = None
+        sub_dict = {}
+        id_message = None
+        message_dict = {}
+        nest = -1
+        for event, value in events:
+            
+            if event == 'start_map':
+                nest += 1
+            if event == 'end_map':
+                nest -= 1
+                if nest == 0:
+                    ch_dict['creation_date'] = int(ch_dict['creation_date'])
+                    insert_channel(ch_dict, db_name)
+                    ch_dict = {}
+
+                if nest == 1 and matched_key in ['text_messages', 'generic_media']:
+                    ch_dict[matched_key] = sub_dict
+                    sub_dict = {}
+                
+                if nest == 2:
+                    sub_dict[id_message] = message_dict
+                    message_dict = {} 
+            
+            if event == 'map_key':
+                if nest == 0: ch_dict['_id'] = int(value) 
+                if nest == 2: id_message = value
+
+            if event =='map_key':
+                if nest == 1: matched_key = value
+                if nest == 3: matched_sub_key = value
+            
+            if event not in ['map_key', 'start_map', 'end_map']:
+                if nest == 1:
+                    ch_dict[matched_key] = value
+                
+                if nest == 3:
+                    if matched_sub_key in ['date', 'forwarded_message_date'] and value!=None:
+                        message_dict[matched_sub_key] = int(value)
+                    else:
+                        message_dict[matched_sub_key] = value
+
+
 # Imports the channels from json format to MongoDB
 # Parameters:
 #   - db_name -> specify the name of the collection to create in MongoDB
-def import_channels_to_mongoDB(db_name, root_directory='public_db'):
+#   - root_directory -> is the directory containing the files to upload
+#   - fast_mode -> if set to False parse the json to reduce the required memory 
+def import_channels_to_mongoDB(db_name, root_directory='public_db', fast_mode=False):
 
     file_list = []
     for directory, _, files in os.walk(root_directory):
@@ -121,13 +179,16 @@ def import_channels_to_mongoDB(db_name, root_directory='public_db'):
                 file_list.append(os.path.join(directory, name))
 
     for file in tqdm(file_list):
-        with open(file) as f:
-            channels = json.load(f)
+        if fast_mode:
+            with open(file) as f:
+                channels = json.load(f)
 
-        for ch_id in channels:
-            channel = channels[ch_id]
-            channel['_id'] = int(ch_id)
-            insert_channel(channel, db_name)
+            for ch_id in channels:
+                channel = channels[ch_id]
+                channel['_id'] = int(ch_id)
+                insert_channel(channel, db_name)
+        else:
+            upload_json_file_to_mongo(file, db_name)
 
 
 if __name__ == '__main__':
