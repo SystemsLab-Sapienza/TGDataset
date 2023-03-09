@@ -88,7 +88,7 @@ def detect_language(channel):
     return target_lan, channel['_id']
 
 
-def perform_language_detection(n_portion=100, n_pool=25):
+def perform_language_detection(n_portion=100, n_pool=2):
     chs_id = db_utilities.get_channel_ids()
     portions = split_list(chs_id, n_portion)
 

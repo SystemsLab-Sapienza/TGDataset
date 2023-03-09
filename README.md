@@ -94,11 +94,17 @@ The JSON files are in the following structure:
 - Install MongoDB following the instruction reported on the [official website](https://www.mongodb.com/docs/manual/administration/install-community/)
 - Download a portion or the whole dataset from [Zenodo](https://zenodo.org/record/7640712#.Y-9PjNLMKXI).
 - Unpack the dataset and move the Json files into the folder `public_db`
+- Install all the necessary python packages running the following command:
+```bash
+pip install -r requirements.txt
+```
 - Run the script `db_utilities.py`
-
+```bash
+python db_utilities.py
+```
 
 ## Other data
-The labeled_data folder contains three csv files:
+The `labeled_data` folder contains three csv files:
 
 - **ch_to_topic_mapping.csv**: indicates the topic addressed by each channel (identified by its ID).
 - **channel_to_language_mapping.csv**: indicates the language used by each channel (identified by its ID).
