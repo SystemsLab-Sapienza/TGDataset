@@ -26,7 +26,7 @@ def insert_channel(new_channel, db_name='Telegram_test'):
         try:
             channel.insert_one(new_channel)
         except DuplicateKeyError:
-            channel.update_one({'_id': new_channel['_id']},{'$set': {'generic_media': new_channel['generic_media'],
+            channel.update_one({'_id': new_channel['_id']}, {'$set': {'generic_media': new_channel['generic_media'],
                                                                      'creation_date': new_channel['creation_date'],
                                                                      'username': new_channel['username'],
                                                                      'title': new_channel['title'],
@@ -34,8 +34,9 @@ def insert_channel(new_channel, db_name='Telegram_test'):
                                                                      'scam': new_channel['scam'],
                                                                      'verified': new_channel['verified'],
                                                                      'n_subscribers': new_channel['n_subscribers']}})
-            
-        if fs.exists(new_channel['_id']): fs.delete(new_channel['_id'])
+
+        if fs.exists(new_channel['_id']):
+            fs.delete(new_channel['_id'])
         fs.put(pickle.dumps(text_messages), _id=new_channel['_id'])
 
 
@@ -76,7 +77,7 @@ def get_channel_by_username(username, db_name='Telegram_test'):
     with MongoClient(uri) as client:
         db = client[db_name]        
         ch = db.Channel.find_one({'username': username})
-        ch['text_messages']= get_text_messages_by_id_ch(ch['_id'], db_name)
+        ch['text_messages'] = get_text_messages_by_id_ch(ch['_id'], db_name)
         ch['_id'] = int(ch['_id'])
     
     return ch
@@ -112,7 +113,7 @@ def get_channel_ids(db_name='Telegram_test'):
     return ids
 
 
-# Upload the json file to mongo db performing the parsing (less memory required) 
+# Upload the json file to mongo db performing the parsing (less memory required)
 # Parameters:
 #   - json_file -> the name of the file to upload
 #   - db_name -> specify the name of the collection in MongoDB
@@ -128,7 +129,7 @@ def upload_json_file_to_mongo(json_file, db_name):
         message_dict = {}
         nest = -1
         for event, value in events:
-            
+
             if event == 'start_map':
                 nest += 1
             if event == 'end_map':
@@ -141,25 +142,29 @@ def upload_json_file_to_mongo(json_file, db_name):
                 if nest == 1 and matched_key in ['text_messages', 'generic_media']:
                     ch_dict[matched_key] = sub_dict
                     sub_dict = {}
-                
+
                 if nest == 2:
                     sub_dict[id_message] = message_dict
-                    message_dict = {} 
-            
-            if event == 'map_key':
-                if nest == 0: ch_dict['_id'] = int(value) 
-                if nest == 2: id_message = value
+                    message_dict = {}
 
-            if event =='map_key':
-                if nest == 1: matched_key = value
-                if nest == 3: matched_sub_key = value
-            
+            if event == 'map_key':
+                if nest == 0:
+                    ch_dict['_id'] = int(value)
+                if nest == 2:
+                    id_message = value
+
+            if event == 'map_key':
+                if nest == 1:
+                    matched_key = value
+                if nest == 3:
+                    matched_sub_key = value
+
             if event not in ['map_key', 'start_map', 'end_map']:
                 if nest == 1:
                     ch_dict[matched_key] = value
-                
+
                 if nest == 3:
-                    if matched_sub_key in ['date', 'forwarded_message_date'] and value!=None:
+                    if matched_sub_key in ['date', 'forwarded_message_date'] and value is not None:
                         message_dict[matched_sub_key] = int(value)
                     else:
                         message_dict[matched_sub_key] = value
@@ -169,7 +174,7 @@ def upload_json_file_to_mongo(json_file, db_name):
 # Parameters:
 #   - db_name -> specify the name of the collection to create in MongoDB
 #   - root_directory -> is the directory containing the files to upload
-#   - fast_mode -> if set to False parse the json to reduce the required memory 
+#   - fast_mode -> if set to False parse the json to reduce the required memory
 def import_channels_to_mongoDB(db_name, root_directory='public_db', fast_mode=False):
 
     file_list = []
