@@ -89,6 +89,13 @@ The JSON files are in the following structure:
 }
 ``` 
 
+## Importing data into MongoDB
+
+- Install MongoDB following the instruction reported on the [official website](https://www.mongodb.com/docs/manual/administration/install-community/)
+- Download a portion or the whole dataset from [Zenodo](https://zenodo.org/record/7640712#.Y-9PjNLMKXI).
+- Unpack the dataset and move the Json files into the folder `public_db`
+- Run the script `db_utilities.py`
+
 
 ## Other data
 The labeled_data folder contains three csv files:
