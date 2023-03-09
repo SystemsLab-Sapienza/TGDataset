@@ -91,10 +91,11 @@ The JSON files are in the following structure:
 
 
 ## Other data
-The data folder contains two csv files:
+The labeled_data folder contains three csv files:
 
 - **ch_to_topic_mapping.csv**: indicates the topic addressed by each channel (identified by its ID).
 - **channel_to_language_mapping.csv**: indicates the language used by each channel (identified by its ID).
+- **sabmyk_network.csv**: the list of channels belonging to the Sabmyk network (identified by its ID).
 
 
 ## Additional files

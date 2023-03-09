@@ -136,7 +136,7 @@ def preprocess(channel):
 
 # Load English channels and perform preprocessing  
 def perform_preprocessing(portion_size=1000, n_pool=45):
-    df = pd.read_csv('data/channel_to_language_mapping.csv', sep='\t')
+    df = pd.read_csv('labeled_data/channel_to_language_mapping.csv', sep='\t')
     df_ = df[df['language']=='en']
     english_channels = list(df_['ch_id'])
 
