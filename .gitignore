@@ -28,6 +28,7 @@
 # Icon must end with two \r
 Icon
 
+labeled_data/*.json
 
 # Thumbnails
 ._*
