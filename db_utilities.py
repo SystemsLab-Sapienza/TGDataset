@@ -8,7 +8,7 @@ import os
 import pickle 
 
 # MongoDB URI
-uri = 'mongodb://localhost:27017'
+uri = 'mongodb://TGDataset'
 
 # Insert the channel in MongoDB
 # Parameters:
@@ -194,7 +194,10 @@ def import_channels_to_mongoDB(db_name, root_directory='public_db', fast_mode=Fa
                 insert_channel(channel, db_name)
         else:
             upload_json_file_to_mongo(file, db_name)
+            print(file + " IMPORTED SUCCESFULLY")
 
 
 if __name__ == '__main__':
     import_channels_to_mongoDB('Telegram_test')
+    print(get_channel_ids("Telegram_test"))
+
