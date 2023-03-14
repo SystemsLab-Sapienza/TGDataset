@@ -12,8 +12,7 @@ services:
       - "27017:27017"
     environment:
       MONGO_INITDB_DATABASE: Telegram_test
-    volumes: 
-      - /var/lib/docker/volumes/vol/_data
+
 
   python_app:
     build: .
@@ -26,7 +25,8 @@ services:
     environment:
       MONGO_INITDB_DATABASE: Telegram_test
     volumes:
-      - /app/public_db
+      - /public_db:/app/public_db
+
 
 
 networks:
