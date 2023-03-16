@@ -6,13 +6,11 @@ The dataset size is approximately 460 GB and is available for download in its zi
 
 If you use this dataset please cite:
 ```
-@INPROCEEDINGS{,
-  author={},
-  booktitle={}, 
-  title={}, 
-  year={},
-  pages={},
-  doi={}
+@article{la2023tgdataset,
+  title={TGDataset: a Collection of Over One Hundred Thousand Telegram Channels},
+  author={La Morgia, Massimo and Mei, Alessandro and Mongardini, Alberto Maria},
+  journal={arXiv preprint arXiv:2303.05345},
+  year={2023}
 }
 ```
 
