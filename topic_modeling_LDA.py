@@ -201,8 +201,13 @@ def perform_LDA(n_portions=20, min_topics=10, max_topics=31, step_size=1):
     pd.DataFrame(model_results).to_csv('lda_tuning_results.csv', index=False)
 
         
+def perform_topic_modeling():
+
+    perform_preprocessing()
     
-                
+    perform_LDA()
+
+
 if __name__ == '__main__':
     
     # 1.

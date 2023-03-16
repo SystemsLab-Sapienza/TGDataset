@@ -8,7 +8,7 @@ import os
 import pickle 
 
 # MongoDB URI
-uri = 'mongodb://TGDataset'
+uri = os.environ.get('MONGO_DB_URL', 'mongodb://localhost:27017') #'mongodb://TGDataset'
 
 # Insert the channel in MongoDB
 # Parameters:

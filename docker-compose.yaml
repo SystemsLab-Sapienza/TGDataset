@@ -24,8 +24,26 @@ services:
       - "8000:8000"
     environment:
       MONGO_INITDB_DATABASE: Telegram_test
-    volumes:
-      - /public_db:/app/public_db
+      MONGO_DB_URL : 'mongodb://TGDataset'
+    #volumes:
+    #  - /public_db:/app/public_db
+
+
+
+  build_db:
+      build:
+        context: .
+        dockerfile: python_create_db.Dockerfile
+      depends_on:
+        - mongodb
+      networks:
+        - app-tier
+      ports:
+        - "8000:8000"
+      environment:
+        MONGO_INITDB_DATABASE: Telegram_test
+      volumes:
+        - ./public_db:/app/public_db
 
 
 
