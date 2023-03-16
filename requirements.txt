@@ -45,7 +45,6 @@ scikit-learn==1.2.2
 scipy==1.10.1
 simpful==2.10.0
 six==1.16.0
-sklearn==0.0.post1
 smart-open==6.3.0
 spacy==3.5.0
 spacy-legacy==3.0.12
