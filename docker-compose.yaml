@@ -32,7 +32,7 @@ services:
 
   build_db:
       build:
-        context: .
+        context: ./
         dockerfile: python_create_db.Dockerfile
       depends_on:
         - mongodb
