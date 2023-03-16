@@ -103,6 +103,21 @@ pip install -r requirements.txt
 python db_utilities.py
 ```
 
+# Docker
+
+## Importing data into MongoDB
+
+- Run the following script
+```bash
+docker-compose run build_db
+```
+
+## Running script
+
+```bash
+docker-compose run python_app
+```
+
 ## Other data
 The `labeled_data` folder contains three csv files:
 
