@@ -41,7 +41,7 @@ def sk_LDA(corpus, n_topic):
     vectorizer = CountVectorizer(analyzer='word',       
                                 min_df=0.01,
                                 max_df=0.40,                       
-                                stop_words= en_stops,#'english',             
+                                stop_words= en_stops,#'english',
                                 lowercase=True,                   
                                 token_pattern='[a-zA-Z0-9]{3,}',  
                                 max_features=10000,          
@@ -52,7 +52,7 @@ def sk_LDA(corpus, n_topic):
     lda_model = LatentDirichletAllocation(n_components=n_topic, # Number of topics
                                         learning_method='online',
                                         random_state=0,       
-                                        n_jobs = -1  # Use all available CPUs
+                                        n_jobs =-1  # Use all available CPUs
                                         )
     lda_output = lda_model.fit_transform(data_vectorized)
 

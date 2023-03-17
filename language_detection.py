@@ -71,10 +71,9 @@ def detect_language(channel):
     dict_lang = defaultdict(int)
     for message in messages:
         if len(message) >= 15:
-    
             try:
                 lan = detect(message)
-                dict_lang[lan] +=1
+                dict_lang[lan] += 1
             except:             
                 pass
                 
@@ -92,7 +91,7 @@ def perform_language_detection(n_portion=100, n_pool=2):
     chs_id = db_utilities.get_channel_ids()
     portions = split_list(chs_id, n_portion)
 
-    results = {'ch_id':[],'language':[]}
+    results = {'ch_id': [], 'language': []}
 
     for portion in tqdm(portions):
         chs = db_utilities.get_channels_by_ids(portion)

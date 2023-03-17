@@ -92,24 +92,21 @@ def get_channels_by_ids(ids_channels, db_name='Telegram_test'):
     with MongoClient(uri) as client:
         db = client[db_name]
         
-        for ch in db.Channel.find({ '_id': { '$in': ids_channels }}):
-            ch['text_messages']= get_text_messages_by_id_ch(ch['_id'], db_name)
+        for ch in db.Channel.find({'_id': {'$in': ids_channels}}):
+            ch['text_messages'] = get_text_messages_by_id_ch(ch['_id'], db_name)
             ch['_id'] = int(ch['_id'])
             chs.append(ch)
     
     return chs
 
 
-# Return the channeld ID of all the channels stored in MongoDB
+# Return the channel ID of all the channels stored in MongoDB
 # Parameters:
 #   - db_name -> specify the name of the collection in MongoDB
 def get_channel_ids(db_name='Telegram_test'):
-    ids = []
     with MongoClient(uri) as client:
         db = client[db_name]
-
-        ids = [ch['_id'] for ch in db.Channel.find({}, {'_id':1})]
-    
+        ids = [ch['_id'] for ch in db.Channel.find({}, {'_id': 1})]
     return ids
 
 
@@ -194,7 +191,7 @@ def import_channels_to_mongoDB(db_name, root_directory='public_db', fast_mode=Fa
                 insert_channel(channel, db_name)
         else:
             upload_json_file_to_mongo(file, db_name)
-            print(file + " IMPORTED SUCCESFULLY")
+            print(file + " IMPORTED SUCCESSFULLY")
 
 
 if __name__ == '__main__':
