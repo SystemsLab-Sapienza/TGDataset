@@ -42,6 +42,7 @@ services:
         - "8000:8000"
       environment:
         MONGO_INITDB_DATABASE: Telegram_test
+        MONGO_DB_URL : 'mongodb://TGDataset'
       volumes:
         - ./public_db:/app/public_db
 

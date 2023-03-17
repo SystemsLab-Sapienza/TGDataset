@@ -1,11 +1,11 @@
-import cmd, sys
+import cmd
 from language_detection import perform_language_detection
 from topic_modeling_LDA import perform_topic_modeling
 
 
 class TGDatasetShell(cmd.Cmd):
 
-    intro = "Welecome to the TGDaset script explorer! Type help or ? to list commands."
+    intro = "Welcome to the TGDataset script explorer! Type help or ? to list commands."
     prompt = '(TGDataset)'
     
     def do_language_detection(self, arg):
@@ -25,4 +25,3 @@ def parse(arg):
 
 if __name__ == '__main__':
     TGDatasetShell().cmdloop()
-    #perform_language_detection()
