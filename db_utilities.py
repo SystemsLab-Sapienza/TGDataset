@@ -5,6 +5,7 @@ from pymongo.errors import DuplicateKeyError
 import gridfs
 from tqdm import tqdm
 import os
+from pathlib import Path
 import pickle 
 
 # MongoDB URI
@@ -192,6 +193,40 @@ def import_channels_to_mongoDB(db_name, root_directory='public_db', fast_mode=Fa
         else:
             upload_json_file_to_mongo(file, db_name)
             print(file + " IMPORTED SUCCESSFULLY")
+
+
+# Return the IDs of the new channels to search during the snowball approach
+# Parameters:
+#   - db_name -> specify the name of the collection in MongoDB
+def get_other_channels_references(db_name='Telegram'):
+    old_references = get_channel_ids(db_name)
+    print('Total number of channels in the db: ', len(old_references))
+
+    path = Path('channels_to_find')
+    if path.is_file():
+        with open ('channels_to_find', 'rb') as fp:
+            last_checked_channels = pickle.load(fp)
+    else:
+        last_checked_channels = old_references
+
+    new_references = {}
+
+    with MongoClient(uri) as client:
+        db = client[db_name]
+        
+        for ch in db.Channel.find({ '_id': { '$in': last_checked_channels }}):
+            ch['text_messages']= get_text_messages_by_id_ch(int(ch['_id']), db_name)
+            ch['_id'] = int(ch['_id'])
+            
+            texts = ch['text_messages']
+            media = ch['generic_media']
+            
+            new_references |= {texts[key]['forwarded_from_id'] for key in texts.keys() if texts[key]['is_forwarded']}
+            new_references |= {media[key]['forwarded_from_id'] for key in media.keys() if media[key]['is_forwarded']}
+    
+    new_references = list(new_references.difference(old_references))
+    
+    return new_references
 
 
 if __name__ == '__main__':
